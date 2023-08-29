@@ -21,11 +21,14 @@
             <td th:text="${producto.fechaAlta}"></td>
             <td th:text="${producto.precio}"></td>
             <td >
-                <a class="btn btn-warning" th:href="@{/productos/editar/} + ${producto.id}">Editar <i
+                <a class="btn btn-warning" th:href="@{/editarProductos/} + ${producto.id}">Editar <i
                         class="fa fa-edit"></i></a>
             </td>
-
-
+            <td >
+                <a class="btn btn-danger" th:href="@{/eliminarProductos/} + ${producto.id}"
+                   onclick="return confirm('Estas seguro que deseas eliminar el Producto?');">Eliminar <i
+                        class="fa fa-trash"></i></a>
+            </td>
         </tr>
 
         </tbody>

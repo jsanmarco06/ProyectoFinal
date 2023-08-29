@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import java.util.Optional;
 
+
 @Service
 @Qualifier("productoService")
 public class ProductoServiceImpl implements ProductoService {
@@ -38,13 +39,14 @@ public class ProductoServiceImpl implements ProductoService {
     }
 
     @Override
-    public Boolean actualizarProducto(Producto producto) {
-        return null;
+    public void actualizarProducto(Producto producto) {
+        productoRepository.save(producto);
     }
 
     @Override
     public Boolean actualizarPrecioProducto(Integer idProducto, Double precioActualizado) {
         return null;
     }
+
 
 }

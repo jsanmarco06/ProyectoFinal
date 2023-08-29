@@ -40,8 +40,8 @@ public class ClienteServiceImpl implements ClienteService {
     }
 
     @Override
-    public Boolean actualizarCliente(Cliente producto) {
-        return null;
+    public void actualizarCliente(Cliente cliente) {
+        clienteRepository.save(cliente);
     }
 
     @Override

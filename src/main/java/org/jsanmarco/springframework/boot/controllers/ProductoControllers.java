@@ -7,11 +7,11 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.ui.Model;
-
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class ProductoControllers {
@@ -31,10 +31,10 @@ public class ProductoControllers {
         return new ResponseEntity<>("guardado", HttpStatus.OK);
     }
 
-    @GetMapping(value = "/agregarProducto")
+    @GetMapping(value = "/agregar")
     public String agregarProducto(Model model) {
         model.addAttribute("producto", new Producto());
-        return "productos/agregar_producto";
+        return "agregar_producto";
     }
 
     @RequestMapping(value="/listarProductos", method= RequestMethod.GET)
@@ -46,18 +46,34 @@ public class ProductoControllers {
 
     /*Agregar un producto Nuevo*/
 
-    @RequestMapping(value = "/guardarProducto", method = RequestMethod.POST)
-    public String guardarProducto(Producto producto){
-        productoService.guardar();
-        return "productos/listarProductos";
+    /*Metodo que se ejecuta al presionar el boton Editar para un Producto de la lista*/
+    @GetMapping(value="/editarProductos/{id}")
+    public String mostrarFormularioEditar(@PathVariable int id, Model model){
+        model.addAttribute("producto",productoService.buscarPorId(id).orElse(null));
+        return "productos/editar_producto";
     }
 
-    /*Eliminar Producto byID*/
-    @RequestMapping(value="/eliminarProducto", method= RequestMethod.GET)
-    public String eliminar(Model model){
-        model.addAttribute("titulo", "Listado de Productos");
-        model.addAttribute("productos", productoService);
-        return "productos/listarProductos";
+
+    /*import javax.validation.Valid;*/
+    @PostMapping(value = "/editarProductos/{id}")
+    public String actualizarProducto(@ModelAttribute Producto producto, BindingResult bindingResult, RedirectAttributes redirectAttrs) {
+
+        productoService.actualizarProducto(producto);
+        redirectAttrs
+                .addFlashAttribute("mensaje", "Editado correctamente")
+                .addFlashAttribute("clase", "success");
+        return "redirect:/listarProductos";
     }
+
+
+    /*Eliminar Producto byID*/
+    @RequestMapping(value="/eliminarProductos/{id}", method = RequestMethod.GET)
+    public String eliminar(@PathVariable(value = "id") int id){
+        if(id > 0){
+            productoService.eliminarPorId(id);
+        }
+        return "redirect:/listarProductos";
+    }
+
 
 }

@@ -13,7 +13,7 @@ public interface ClienteService {
 
     Optional<Cliente> buscarPorId(Integer id);
 
-    Boolean actualizarCliente(Cliente cliente);
+    void actualizarCliente(Cliente cliente);
 
     void guardar(Cliente cliente);
 

@@ -7,9 +7,11 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class ClienteControllers {
@@ -46,5 +48,30 @@ public class ClienteControllers {
         model.addAttribute("clientes", clienteService.listar());
         return "clientes/listarClientes";
     }
+    @GetMapping(value="/editarClientes/{id}")
+    public String mostrarFormularioEditar(@PathVariable int id, Model model){
+        model.addAttribute("cliente",clienteService.buscarPorId(id).orElse(null));
+        return "clientes/editar_clientes";
+    }
+    /*import javax.validation.Valid;*/
+    @PostMapping(value = "/editarClientes/{id}")
+    public String actualizarClientes(@ModelAttribute Cliente cliente, BindingResult bindingResult, RedirectAttributes redirectAttrs) {
+        clienteService.actualizarCliente(cliente);
+        redirectAttrs
+                .addFlashAttribute("mensaje", "Editado correctamente")
+                .addFlashAttribute("clase", "success");
+        return "redirect:/listarClientes";
+    }
+
+
+    /*Eliminar Clientes byID*/
+    @RequestMapping(value="/eliminarClientes/{id}", method = RequestMethod.GET)
+    public String eliminar(@PathVariable(value = "id") int id){
+        if(id > 0){
+            clienteService.eliminarPorId(id);
+        }
+        return "redirect:/listarClientes";
+    }
+
 
 }

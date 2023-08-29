@@ -13,7 +13,7 @@ public class Cliente {
     @Getter
     @Setter
     @Id
-    @Column(name="idclientes")
+    @Column(name="id")
     @GeneratedValue(strategy = GenerationType.AUTO,generator = "native")
     @GenericGenerator(
             name="native",
